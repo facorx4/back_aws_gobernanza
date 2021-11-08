@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const aplicacion = require('./app');
-const puerto = 3900;
+const puerto = 3000;
 
 const nanmeDB = 'datagovernance';
 const userDB = 'guandera';
