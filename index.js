@@ -2,12 +2,13 @@ const mongoose = require("mongoose");
 const aplicacion = require('./app');
 const puerto = 3000;
 
+
 const nanmeDB = 'datagovernance';
 const userDB = 'guandera';
 const passUserDB = '1234';
 
 
-const url = `mongodb+srv://${userDB}:${passUserDB}@datagovernance.03ptx.mongodb.net/${nanmeDB}?retryWrites=true&w=majority`;
+const url = `mongodb+srv://${userDB}:${passUserDB}@datagovernance.03ptx.mongodb.net/${nanmeDB}?retryWrites=true&w=majority`;  
 
 
 
@@ -34,6 +35,11 @@ aplicacion.use((req, res, next) => {
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
+
+
+
+
+
 
 /**********************************************************************************
     Configuracion Base de datos

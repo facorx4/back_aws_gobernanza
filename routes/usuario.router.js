@@ -6,6 +6,11 @@ const LoginControlador = require('../controladores/login.controlador');
 const multipart = require('connect-multiparty');
 const md_upload = multipart({ uploadDir: './tmp/files/avatars' });
 const { verificaToker } = require('../helpers/autenticacion'); //importamos el middlewares que valida el token
+const multipartUsario = require('connect-multiparty');  
+const multipartMiddleware = multipartUsario({  
+    uploadDir: './tmp/files/dataFile/Usuarios/'
+});
+
 
 const api = '/api/usuario/';
 /***********************************************************
@@ -30,5 +35,13 @@ router.get(`${api}get-image/:image`, UsuarioControlador.getImage);
     Rutas para el inicio de sesion del usuario
 ***********************************************************/
 router.post(`${api}login`, LoginControlador.iniciarSesion);
+
+/***********************************************************
+    Rutas de import data y cargar
+***********************************************************/
+
+
+router.post(`${api}import-data`, multipartMiddleware, verificaToker, UsuarioControlador.cargarArchivo); 
+router.post(`${api}creardata`, verificaToker, UsuarioControlador.createImport);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const bodyParse = require("body-parser");
 const aplicacion = express();
 const cors = require('cors')
 
+
 aplicacion.use(bodyParse.urlencoded({ extended: false }));
 aplicacion.use(bodyParse.json());
 aplicacion.set('view engine', 'ejs');
@@ -45,6 +46,7 @@ const RouterEstilo = require('./routes/estilo.router');
 
 
 
+
 aplicacion.use(RouterUsuario);
 aplicacion.use(RouterRol);
 aplicacion.use(RouterModulo);
@@ -77,6 +79,11 @@ aplicacion.use(RouterTicket);
 aplicacion.use(RouterCompaniaSubdominio);
 aplicacion.use(RouterTrazabilidad);
 aplicacion.use(RouterEstilo);
+
+
+/**********************************************************************************
+    Configuracion fileUpload
+**********************************************************************************/
 
 
 

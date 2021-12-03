@@ -37,6 +37,7 @@ async function create(req, res) {
         userAvatar: body.userAvatar,
         estilo: body.estilo,
         permisos: body.permisos
+
     });
     await usuario.save((err, usuarioStore) => {
         if (err || !usuarioStore) {
@@ -160,7 +161,7 @@ async function perfilUsuario(req, res) {
 
 async function passwordUsuario(req, res) {
     const id = req.body.userId; //obtenemos el id del usuario
-    await Usuarios.findById(id, async(err, usuarioDB) => {
+    await Usuarios.findById(id, async (err, usuarioDB) => {
         if (err || !usuarioDB) {
             return res.status(400).json({
                 status: "Error",
@@ -219,6 +220,7 @@ async function upload(req, res) {
     }
     // Conseguir nombre y la extensión del archivo
     var file_path = req.files.file0.path;
+
     //var file_split = file_path.split('\\');
     // * ADVERTENCIA * EN LINUX O MAC
     var file_split = file_path.split('/');
@@ -261,9 +263,134 @@ async function getImage(req, res) {
     });
 }
 
+async function cargarArchivo(req, res) {
+    // Recoger el fichero de la petición
+    var file_name = 'Archivo no subido...';
+    if (!req.files) {
+        return res.status(404).send({
+            status: 'error',
+            message: file_name
+        });
+    }
+
+    return res.status(200).send({
+        status: 'success',
+
+    });
+
+
+}
+
+
+
+
+
+
+async function createImport(req, res) {
+
+
+    var cadena = [];
+
+    const dir = './tmp/files/dataFile/Usuarios/';
+    const files = fs.readdirSync(dir);
+
+
+    for (const file of files) {
+
+
+        const data = fs.readFileSync(`./tmp/files/dataFile/Usuarios/${file}`, 'UTF-8')
+
+
+
+        cadena = data.split('\n')
+
+
+    }
+
+    var corre = true;
+
+
+    for (i = 0; i < cadena.length; i++) {
+
+
+        var recorre = cadena[i].split(/[ |,;]/)
+        var userNombres = recorre[0];
+        var userApellidos = recorre[1];
+        var userSys = recorre[2];
+        var userEmail = recorre[3]; 
+        var userPassword = recorre[4]; 
+        var userEstado = recorre[5]; 
+        var userRolID = recorre[6];
+        var userLastDate = recorre[7];
+        var userDateAdd = recorre[8]; 
+        var userContacto = recorre[9]; 
+        var userSobreMi = recorre[10]; 
+        var userAvatar = recorre[11]; 
+        var estilo = recorre[12];
+
+        const newObject = new Usuarios({
+
+            userNombres: userNombres,
+            userApellidos: userApellidos,
+            userSys: userSys,
+            userEmail: userEmail,
+            userPassword: userPassword,
+            userEstado: userEstado,
+            userRolID: userRolID,
+            userLastDate: userLastDate,
+            userDateAdd: userDateAdd,
+            userContacto: userContacto,
+            userSobreMi: userSobreMi,
+            userAvatar: userAvatar,
+            estilo: estilo
+
+
+        });
+
+
+
+        await newObject.save((err, dataStore) => {
+            if (err || !dataStore) {
+                corre = false;
+            }
+
+
+        })
+
+
+    }
+
+    if (corre) {
+        const directory = './tmp/files/dataFile/Usuarios/';
+
+        fs.readdir(directory, (err, files) => {
+            if (err) throw err;
+
+            for (const file of files) {
+                fs.unlink(path.join(directory, file), err => {
+                    if (err) throw err;
+                });
+            }
+        });
+
+        return res.status(200).json({
+            status: "success",
+            data: "todo bien",
+        });
+
+    } else {
+        return res.status(400).json({
+            status: "success",
+            data: "error al insertar los datos",
+        });
+
+    }
+
+}
+
 
 module.exports = {
-   
+
     getAll,
     create,
     getOne,
@@ -272,5 +399,7 @@ module.exports = {
     upload,
     getImage,
     perfilUsuario,
-    passwordUsuario
+    passwordUsuario,
+    cargarArchivo,
+    createImport
 }
