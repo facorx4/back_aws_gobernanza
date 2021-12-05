@@ -8,7 +8,7 @@ COPY package*.json ./
 
 USER node
 
-RUN npm install 
+RUN npm install react@16.13.1
 
 COPY --chown=node:node . .
 
